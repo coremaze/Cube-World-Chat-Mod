@@ -1,0 +1,5 @@
+cmake_minimum_required (VERSION 3.8)
+project(project_ChatMod)
+add_subdirectory(cwmods)
+add_library (ChatMod SHARED "main.cpp")
+target_link_libraries (ChatMod LINK_PUBLIC CWSDK)
