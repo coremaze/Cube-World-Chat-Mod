@@ -1,4 +1,4 @@
-#include "cwmods/cwsdk.h"
+#include "CWSDK/cwsdk.h"
 
 class ChatMod : GenericMod {
 	virtual void Initialize() override {
@@ -8,7 +8,7 @@ class ChatMod : GenericMod {
 	}
 	virtual int OnChat(std::wstring* message) override {
 		// Make sure the vanilla commands don't get eaten 
-		for (const std::wstring& str : { std::wstring(L"/pet"), std::wstring(L"/sit"), std::wstring(L"/dance"), std::wstring(L"/namepet"), std::wstring(L"/check") }) {
+		for (const std::wstring& str : { std::wstring(L"/pet"), std::wstring(L"/sit"), std::wstring(L"/dance"), std::wstring(L"/namepet"), std::wstring(L"/check"), std::wstring(L"/wave") }) {
 			if (message->size() >= str.size() && 
 				!message->compare(0, str.length(), str)) {
 				return 0;
