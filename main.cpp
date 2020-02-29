@@ -21,18 +21,13 @@ class ChatMod : GenericMod {
 		if (cube::SteamUser()->GetSteamID() != game->client.host_steam_id || game->host.connections.size() > 1) {
 			// Construct a chat packet
 			// Thanks to Andoryuuta for reverse engineering these packets, even before the beta was released
-			u32 packet_size = 4 + 4 + 2 * message->size();
-			u8* packet = new u8[packet_size];
-			u32 packet_id = 0x0E;
-			u32 msg_length = message->size();
+			BytesIO bytesio;
 
-			memcpy(packet + 0, &packet_id, 4);
-			memcpy(packet + 4, &msg_length, 4);
-			memcpy(packet + 8, message->c_str(), message->size() * 2);
+			bytesio.Write<u32>(0x0E); //Packet ID
+			bytesio.Write<u32>(message->size()); //Message size
+			for (int i = 0; i < message->size(); i++) bytesio.Write<wchar_t>(message->c_str()[i]); //Message
 
-			cube::SteamNetworking()->SendP2PPacket(game->client.host_steam_id, packet, packet_size, k_EP2PSendReliable, 1);
-
-			delete[] packet;
+			cube::SteamNetworking()->SendP2PPacket(game->client.host_steam_id, bytesio.Data(), bytesio.Size(), k_EP2PSendReliable, 1);
 
 			return 1;
 		}
